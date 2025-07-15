@@ -1,12 +1,18 @@
 import 'package:flutter/material.dart';
 import '../models/produto.dart';
 import '../services/api_service.dart';
-import "../services/cart_service.dart";
-import "carrinho_screen.dart";
+import '../models/marca.dart';
+import '../models/modelo.dart';
+import '../models/tipo.dart';
+import '../services/cart_service.dart';
+import 'carrinho_screen.dart';
 import '../services/db_service.dart';
 
 class ProdutosScreen extends StatefulWidget {
-  const ProdutosScreen({super.key});
+  final Marca marca;
+  final Modelo modelo;
+  final Tipo tipo;
+  const ProdutosScreen({super.key, required this.marca, required this.modelo, required this.tipo});
 
   @override
   State<ProdutosScreen> createState() => _ProdutosScreenState();
@@ -37,7 +43,8 @@ class _ProdutosScreenState extends State<ProdutosScreen> {
     final online = await ApiService.verificarConexao();
 
     if (online) {
-      final apiProdutos = await ApiService.buscarProdutos();
+      final apiProdutos = await ApiService.buscarProdutosFiltro(
+          widget.tipo.tipocod, widget.marca.marcascod, widget.modelo.modcod);
       await DBService.salvarProdutos(apiProdutos);
       setState(() {
         produtos = apiProdutos;
@@ -70,7 +77,7 @@ class _ProdutosScreenState extends State<ProdutosScreen> {
         icon: const Icon(Icons.shopping_cart),
         label: Text(CartService.totalItens.toString()),
       ),
-      appBar: AppBar(title: const Text('JP Peças')),
+      appBar: AppBar(title: Text(widget.tipo.tipodes)),
       body: Column(
         children: [
           Padding(

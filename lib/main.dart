@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'screens/produtos_screen.dart';
+import 'screens/marcas_screen.dart';
 
 void main() {
   runApp(const JPApp());
@@ -13,7 +13,7 @@ class JPApp extends StatelessWidget {
     return MaterialApp(
       title: 'JP Peças',
       theme: ThemeData(primarySwatch: Colors.blue),
-      home: const ProdutosScreen(),
+      home: const MarcasScreen(),
     );
   }
 }
