@@ -17,7 +17,7 @@ class Produto {
     return Produto(
       procod: json['procod'],
       tipodes: json['tipodes'],
-      marcasdes: json['marcasdes'],
+      marcasdes: json['marcasdes'] ?? '',
       prodes: json['prodes'],
       provl: double.parse(json['provl'].toString()),
     );
