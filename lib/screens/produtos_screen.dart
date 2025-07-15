@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import '../models/produto.dart';
 import '../services/api_service.dart';
+import "../services/cart_service.dart";
+import "carrinho_screen.dart";
 import '../services/db_service.dart';
 
 class ProdutosScreen extends StatefulWidget {
@@ -60,6 +62,14 @@ class _ProdutosScreenState extends State<ProdutosScreen> {
   Widget build(BuildContext context) {
     final lista = _controller.text.isEmpty ? produtos : filtrados;
     return Scaffold(
+      floatingActionButton: FloatingActionButton.extended(
+        onPressed: () async {
+          await Navigator.push(context, MaterialPageRoute(builder: (_) => const CarrinhoScreen()));
+          setState(() {});
+        },
+        icon: const Icon(Icons.shopping_cart),
+        label: Text(CartService.totalItens.toString()),
+      ),
       appBar: AppBar(title: const Text('JP Peças')),
       body: Column(
         children: [
@@ -86,8 +96,19 @@ class _ProdutosScreenState extends State<ProdutosScreen> {
                     title: Text(p.prodes),
                     subtitle:
                         Text('Marca: ${p.marcasdes} • Tipo: ${p.tipodes}'),
-                    trailing:
+                    trailing: Column(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
                         Text('R\$ ${p.provl.toStringAsFixed(2)}'),
+                        IconButton(
+                          icon: const Icon(Icons.add_shopping_cart),
+                          onPressed: () {
+                            CartService.adicionar(p);
+                            setState(() {});
+                          },
+                        ),
+                      ],
+                    ),
                   ),
                 );
               },
